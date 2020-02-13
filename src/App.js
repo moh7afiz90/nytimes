@@ -1,25 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useState, useEffect, Fragment} from 'react';
+import { Container } from '@material-ui/core';
+import NavBar from './components/Navbar'
+import TopStoriesList from './components/TopStoriesList'
+import SearchArticleList from './components/SearchedArticleList'
+import nytimes from './api/nytimes'
 
-function App() {
+
+const API_KEY =`${process.env.REACT_APP_API_KEY}`
+
+
+const App = () => {
+  const [articles, setArticles] = useState([])
+  const [topStories, setTopStories] = useState([])
+
+
+  const onSearchSubmit = async(searchTerm) => {
+    const response = await nytimes.get(`/search/v2/articlesearch.json?q=${searchTerm}&api-key=${API_KEY}`)
+    setArticles(response.data.response.docs)
+    console.log(response.data.response.docs) 
+  }
+
+  useEffect(() => {
+    const getTopArticles = async () => {
+      const response = await nytimes.get(`/topstories/v2/world.json?api-key=${API_KEY}`)
+      setTopStories(response.data.results)
+      console.log(response.data.results)
+    }
+    getTopArticles()
+  },[])
+
+  
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Fragment>
+      <NavBar onInvokingSearchTerm={onSearchSubmit}></NavBar>
+      <Container>
+        {
+          articles.length === 0 || articles === undefined? 
+          <TopStoriesList topStories={topStories}></TopStoriesList>: 
+          articles.length === 0 || articles === undefined? <div>Error</div>: 
+          <SearchArticleList articles={articles}></SearchArticleList>}
+      </Container>
+    </Fragment>
   );
 }
 
