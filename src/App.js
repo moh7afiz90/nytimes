@@ -17,14 +17,12 @@ const App = () => {
   const onSearchSubmit = async(searchTerm) => {
     const response = await nytimes.get(`/search/v2/articlesearch.json?q=${searchTerm}&api-key=${API_KEY}`)
     setArticles(response.data.response.docs)
-    console.log(response.data.response.docs) 
   }
 
   useEffect(() => {
     const getTopArticles = async () => {
       const response = await nytimes.get(`/topstories/v2/world.json?api-key=${API_KEY}`)
       setTopStories(response.data.results)
-      console.log(response.data.results)
     }
     getTopArticles()
   },[])
