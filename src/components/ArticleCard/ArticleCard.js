@@ -84,7 +84,7 @@ const ArticleCard = (props) => {
 
   return (
     <Card item className={(cardStyle.newsCard, shadowStyles.root)}>
-      <CardMedia classes={mediaStyles} image={props.story.multimedia[3].url} />
+//       <CardMedia classes={mediaStyles} image={props.story.multimedia[3].url} />
       <CardContent className={cardStyle.content}>
         <TextInfoCardContent
           classes={textCardContentStyles}
